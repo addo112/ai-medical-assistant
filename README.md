@@ -1,0 +1,146 @@
+# 🏥 MedCheck AI — Prescription Analyzer
+
+An AI-powered web application that analyzes medical prescriptions against patient symptoms to verify whether prescribed medications are appropriate. If medications are found to be unsuitable, the app recommends better alternatives.
+
+![MedCheck AI](https://img.shields.io/badge/AI-Medical%20Assistant-0d9488?style=for-the-badge&logo=heart&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Netlify](https://img.shields.io/badge/Netlify-Deployed-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)
+
+## ✨ Features
+
+- **🧠 Smart AI Analysis** — Powered by Google Gemini AI to analyze prescriptions against patient symptoms
+- **💊 Drug Verification** — Checks if prescribed medications match the patient's complaints
+- **🔄 Alternative Recommendations** — Suggests appropriate alternatives when prescriptions are mismatched
+- **⚠️ Drug Interaction Detection** — Flags potentially dangerous drug combinations
+- **📊 Confidence Scoring** — Provides confidence levels for each analysis
+- **📋 Analysis History** — Saves past analyses for reference
+- **📱 Responsive Design** — Works beautifully on desktop, tablet, and mobile
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [Git](https://git-scm.com/)
+- [Google Gemini API Key](https://aistudio.google.com/apikey) (free)
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/ai-medical-assistant.git
+   cd ai-medical-assistant
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables:**
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env` and add your Gemini API key:
+   ```
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+4. **Run locally:**
+   ```bash
+   npx netlify dev
+   ```
+   Open [http://localhost:8888](http://localhost:8888)
+
+### Production Build
+
+```bash
+npm run build
+```
+
+## 🏗️ Tech Stack
+
+| Technology | Purpose |
+|-----------|---------|
+| **React 18** | Frontend UI framework |
+| **Vite** | Build tool & dev server |
+| **Tailwind CSS** | Utility-first CSS styling |
+| **React Router v6** | Client-side routing |
+| **Lucide React** | Beautiful icon library |
+| **Netlify Functions** | Serverless backend API |
+| **Google Gemini AI** | AI analysis engine |
+
+## 📁 Project Structure
+
+```
+ai-medical-assistant/
+├── netlify/
+│   └── functions/
+│       └── analyze.js          # Serverless API endpoint
+├── public/
+│   ├── _redirects              # SPA routing for Netlify
+│   └── favicon.svg             # App icon
+├── src/
+│   ├── components/
+│   │   ├── AnalysisResult.jsx  # AI results display
+│   │   ├── Footer.jsx          # App footer
+│   │   ├── LoadingSpinner.jsx  # Loading animation
+│   │   ├── MedicalDisclaimer.jsx # Disclaimer banner
+│   │   └── Navbar.jsx          # Navigation bar
+│   ├── pages/
+│   │   ├── AboutPage.jsx       # About page
+│   │   ├── AnalyzePage.jsx     # Main analysis page
+│   │   ├── HistoryPage.jsx     # Analysis history
+│   │   └── HomePage.jsx        # Landing page
+│   ├── App.jsx                 # Root component
+│   ├── index.css               # Global styles
+│   └── main.jsx                # Entry point
+├── .env.example                # Environment template
+├── index.html                  # HTML shell
+├── netlify.toml                # Netlify configuration
+├── package.json                # Dependencies
+├── tailwind.config.js          # Tailwind configuration
+└── vite.config.js              # Vite configuration
+```
+
+## 🔧 How It Works
+
+1. **Enter Patient Info** — Age, gender, weight, allergies, medical history
+2. **Add Symptoms** — List complaints with severity levels (mild/moderate/severe)
+3. **Add Prescriptions** — Enter prescribed drug names, dosages, and frequency
+4. **Get AI Analysis** — The AI compares drugs against symptoms and provides:
+   - ✅ **Appropriate** — Drug matches the symptoms
+   - ⚠️ **Caution** — Drug may work but has concerns
+   - ❌ **Not Recommended** — Drug doesn't match; alternatives suggested
+
+## 🌐 Deployment
+
+### Deploy to Netlify
+
+1. Push your code to GitHub
+2. Go to [Netlify](https://app.netlify.com)
+3. Click **"Add new site"** → **"Import an existing project"**
+4. Connect your GitHub repository
+5. Configure build settings:
+   - **Build command:** `npm run build`
+   - **Publish directory:** `dist`
+6. Add environment variable:
+   - Key: `GEMINI_API_KEY`
+   - Value: Your Gemini API key
+7. Click **Deploy**
+
+## ⚕️ Medical Disclaimer
+
+> **⚠️ IMPORTANT:** This application is for **educational and informational purposes only**. It is NOT a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay seeking it because of something generated by this application.
+
+## 📄 License
+
+MIT License — feel free to use, modify, and distribute.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+---
+
+**Built with ❤️ using AI technology to support better healthcare decisions.**
