@@ -119,15 +119,24 @@ export default function AnalyzePage() {
         })
       });
       
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Analysis request failed. Please try again.');
+        const errorMsg = data?.error || 'Analysis request failed.';
+        if (errorMsg.includes('API key')) {
+          throw new Error('The Gemini API key has not been configured on the server. Please add your GEMINI_API_KEY in Netlify Dashboard → Site Settings → Environment Variables, then redeploy.');
+        }
+        throw new Error(errorMsg);
       }
       
-      const data = await response.json();
       setAnalysisResult(data);
       saveToHistory(data);
     } catch (err) {
-      setError(err.message || 'An unexpected error occurred.');
+      if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
+        setError('Network error. Please check your internet connection and try again.');
+      } else {
+        setError(err.message || 'An unexpected error occurred. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -337,7 +346,22 @@ export default function AnalyzePage() {
                   <AlertCircle className="w-10 h-10 text-red-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">Analysis Failed</h3>
-                <p className="text-gray-600 mb-8 max-w-md mx-auto">{error}</p>
+                <p className="text-gray-600 mb-6 max-w-lg mx-auto">{error}</p>
+                
+                {error.includes('API key') && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 max-w-lg mx-auto mb-8 text-left">
+                    <h4 className="font-bold text-amber-800 mb-3 flex items-center">
+                      <AlertCircle className="w-5 h-5 mr-2" /> Setup Instructions
+                    </h4>
+                    <ol className="text-sm text-amber-700 space-y-2 list-decimal list-inside">
+                      <li>Get a free API key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="underline font-medium hover:text-amber-900">Google AI Studio</a></li>
+                      <li>Go to <a href="https://app.netlify.com/projects/medcheck-ai-assistant/configuration/env" target="_blank" rel="noopener noreferrer" className="underline font-medium hover:text-amber-900">Netlify Environment Variables</a></li>
+                      <li>Add variable: <code className="bg-amber-100 px-1.5 py-0.5 rounded text-xs font-mono">GEMINI_API_KEY</code> = your key</li>
+                      <li>Redeploy the site from the Netlify dashboard</li>
+                    </ol>
+                  </div>
+                )}
+
                 <button onClick={() => submitAnalysis()} className="bg-medical-600 text-white px-6 py-3 rounded-md hover:bg-medical-700 flex items-center mx-auto transition shadow-md">
                   <RefreshCw className="w-5 h-5 mr-2" /> Retry Analysis
                 </button>
