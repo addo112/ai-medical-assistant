@@ -122,21 +122,62 @@ Return a JSON response with exactly this structure:
       }
     };
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestBody)
-    });
+    // Try multiple model endpoints for resilience
+    const models = [
+      'gemini-2.0-flash',
+      'gemini-1.5-flash',
+      'gemini-1.5-flash-latest'
+    ];
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Gemini API Error:', errorData);
+    let response;
+    let lastError;
+
+    for (const model of models) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      
+      try {
+        response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (response.ok) {
+          break; // Success, stop trying models
+        }
+
+        lastError = await response.text();
+        console.error(`Gemini API Error (${model}):`, lastError);
+        response = null; // Reset so we try next model
+      } catch (fetchErr) {
+        lastError = fetchErr.message;
+        console.error(`Fetch Error (${model}):`, fetchErr.message);
+        response = null;
+      }
+    }
+
+    if (!response || !response.ok) {
+      // Parse the error to give helpful messages
+      let errorDetail = 'Error calling Gemini API.';
+      try {
+        const parsed = JSON.parse(lastError);
+        if (parsed?.error?.message) {
+          errorDetail = parsed.error.message;
+        }
+      } catch (e) {
+        // Use raw error
+        if (lastError) errorDetail = lastError.substring(0, 200);
+      }
+      
       return {
-        statusCode: response.status,
+        statusCode: 502,
         headers,
-        body: JSON.stringify({ error: 'Error calling Gemini API.' })
+        body: JSON.stringify({ 
+          error: `AI service error: ${errorDetail}`,
+          hint: 'Verify your GEMINI_API_KEY is a valid Google AI Studio API key (starts with AIza...).'
+        })
       };
     }
 

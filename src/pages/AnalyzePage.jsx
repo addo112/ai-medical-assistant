@@ -123,10 +123,11 @@ export default function AnalyzePage() {
 
       if (!response.ok) {
         const errorMsg = data?.error || 'Analysis request failed.';
-        if (errorMsg.includes('API key')) {
+        const hint = data?.hint || '';
+        if (errorMsg.includes('API key') || hint.includes('API key')) {
           throw new Error('The Gemini API key has not been configured on the server. Please add your GEMINI_API_KEY in Netlify Dashboard → Site Settings → Environment Variables, then redeploy.');
         }
-        throw new Error(errorMsg);
+        throw new Error(hint ? `${errorMsg}\n\n💡 Hint: ${hint}` : errorMsg);
       }
       
       setAnalysisResult(data);
