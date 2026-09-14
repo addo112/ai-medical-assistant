@@ -107,9 +107,16 @@ const AnalysisResult = ({ result }) => {
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Overall Verdict Banner */}
       <div className={`${style.bg} text-white rounded-lg shadow-lg overflow-hidden`}>
-        <div className="px-6 py-4 flex items-center space-x-4">
-          <Icon className="h-8 w-8 flex-shrink-0" />
-          <h2 className="text-2xl font-bold">{style.text}</h2>
+        <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex items-center space-x-4">
+            <Icon className="h-8 w-8 flex-shrink-0" />
+            <h2 className="text-2xl font-bold">{style.text}</h2>
+          </div>
+          {result.engine && (
+            <span className="inline-flex items-center self-start sm:self-auto text-xs font-semibold px-3 py-1 rounded-full bg-white bg-opacity-20 text-white border border-white border-opacity-30 shadow-sm backdrop-blur-sm">
+              ⚡ {result.engine}
+            </span>
+          )}
         </div>
       </div>
 
